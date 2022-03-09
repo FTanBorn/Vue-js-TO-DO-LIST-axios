@@ -95,7 +95,7 @@
                   <div class="card-header">{{ list.gorevadbitir}}</div>
                 </div>
                 <div class="col-6 mt-1 float-end">
-                  <button type="button" class="btn btn-danger btn-sm me-2" @click="deleteGorevBiten(list.id)" >Sil</button>
+                  <button type="button" class=" float-end btn btn-danger btn-sm me-2" @click="deleteGorevBiten(list.id)" >Sil</button>
                 </div>
               </div>
               <div class="card-body">
@@ -178,12 +178,15 @@ export default {
       this.deleteGorev(id)
 
     },
+
     gorevbittimi(id,gorevadnew,gorevaciklanew){
       this.gorevbitirlist.gorevadbitir=gorevadnew;
       this.gorevbitirlist.gorevaciklabitir=gorevaciklanew;
       appAxios.post("/bitirilengorev",this.gorevbitirlist).then((getirbitir_response) =>{
         console.log("getirbitir post >>",getirbitir_response.data)
       })
+      this.deleteGorevYapılan(id)
+
     },
 
 
