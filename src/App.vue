@@ -38,20 +38,14 @@
           <div class="card-body">
 
 
-
             <div class="card bg-light mb-3" style="max-width: 20rem;" v-for="item in gorevList" v-bind:key="item.id">
-
               <div class="row">
                 <div class="col-6">
                   <div class="card-header">{{ item.gorevad}}</div>
                 </div>
                 <div class="col-6 mt-1 float-end">
-                  <button type="button" class="btn btn-danger btn-sm me-2" @click="deleteGorev(item.id)">
-                    Sil
-                  </button>
-                  <button type="button" class="btn btn-info btn-sm ">
-                    Başla
-                  </button>
+                  <button type="button" class="btn btn-danger btn-sm me-2" @click="deleteGorev(item.id)">Sil</button>
+                  <button type="button" class="btn btn-info btn-sm " @click="gorevBasla(item.id,item.gorevad,item.gorevacikla)">Başla</button>
                 </div>
               </div>
               <div class="card-body">
@@ -69,6 +63,23 @@
           <div class="card-body">
 
 
+            <div class="card bg-light mb-3" style="max-width: 20rem;" v-for="eleman in gorevListYap" v-bind:key="eleman.id">
+              <div class="row">
+                <div class="col-6">
+                  <div class="card-header">{{ eleman.gorevadnew}}</div>
+                </div>
+                <div class="col-6 mt-1 float-end">
+                  <button type="button" class="btn btn-danger btn-sm me-2" @click="deleteGorevYapılan(eleman.id)" >Sil</button>
+                  <button type="button" class="btn btn-info btn-sm " @click="gorevbittimi(eleman.id,eleman.gorevadnew,eleman.gorevaciklanew)">Başla</button>
+
+                </div>
+              </div>
+              <div class="card-body">
+                <p class="card-text" >{{ eleman.gorevaciklanew}}</p>
+              </div>
+            </div>
+
+
           </div>
         </div>
       </div>
@@ -77,6 +88,20 @@
           <div class="card-header bg-warning text-center">YAPILANLAR</div>
           <div class="card-body">
 
+
+            <div class="card bg-light mb-3" style="max-width: 20rem;" v-for="list in gorevbit" v-bind:key="list.id">
+              <div class="row">
+                <div class="col-6">
+                  <div class="card-header">{{ list.gorevadbitir}}</div>
+                </div>
+                <div class="col-6 mt-1 float-end">
+                  <button type="button" class="btn btn-danger btn-sm me-2" @click="deleteGorevBiten(list.id)" >Sil</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <p class="card-text" >{{ list.gorevaciklabitir}}</p>
+              </div>
+            </div>
 
           </div>
         </div>
@@ -100,22 +125,68 @@ export default {
         gorevad : null,
         gorevacikla : null,
       },
-      gorevDataYap:{
-        gorevadyap:null,
-        gorevaciklayap:null ,
+      gorevyapid:{
+        gorevadnew:null,
+        gorevaciklanew:null
       },
+      gorevbitirlist:{
+        gorevadbitir:null,
+        gorevaciklabitir:null,
+      },
+
+
 
       gorevList : undefined,
       gorevListYap :undefined,
+      gorevbit : undefined,
     }
   },
   methods:{
+    deleteGorev(id){
+      appAxios.delete("/gorevs/"+id).then(() => {
+        this.getGorevs();
+      })
+    },
+    deleteGorevYapılan(id){
+      appAxios.delete("/yapilangorev/"+id).then(() => {
+        this.getGorevsYap();
+      })
+    },
+    deleteGorevBiten(id){
+      appAxios.delete("/bitirilengorev/"+id).then(() => {
+        this.getGorevBitir();
+
+      })
+    },
+
+
     onSave(){
       appAxios.post("/gorevs",this.gorevData).then(kayit_response => {
         console.log("kayit_response :>> ",kayit_response);
       })
       console.log(this.gorevData)
+      this.getGorevs();
+      this.gorevData = {}
+
     },
+    gorevBasla(id,gorevad,gorevacikla){
+      this.gorevyapid.gorevadnew=gorevad;
+      this.gorevyapid.gorevaciklanew=gorevacikla;
+        appAxios.post("/yapilangorev",this.gorevyapid).then((getirpost_response) =>{
+          console.log("getir post >>",getirpost_response.data)
+        })
+      this.deleteGorev(id)
+
+    },
+    gorevbittimi(id,gorevadnew,gorevaciklanew){
+      this.gorevbitirlist.gorevadbitir=gorevadnew;
+      this.gorevbitirlist.gorevaciklabitir=gorevaciklanew;
+      appAxios.post("/bitirilengorev",this.gorevbitirlist).then((getirbitir_response) =>{
+        console.log("getirbitir post >>",getirbitir_response.data)
+      })
+    },
+
+
 
 
     getGorevs(){
@@ -128,15 +199,34 @@ export default {
         console.log(error)
       })
     },
-    deleteGorev(id){
-      appAxios.delete("/gorevs/"+id).then(() => {
-        this.getGorevs();
+    getGorevsYap(){
+      appAxios.get("/yapilangorev")
+      .then((getirlist_response) => {
+        this.gorevListYap=getirlist_response.data
+        console.log(getirlist_response.data)
       })
+      .catch((error) =>{
+        console.log(error)
+      })
+    },
+    getGorevBitir(){
+      appAxios.get("/bitirilengorev")
+          .then((getirlist2_response) => {
+            this.gorevbit=getirlist2_response.data
+            console.log(getirlist2_response.data)
+          })
+          .catch((error) =>{
+            console.log(error)
+          })
     }
+
+
   },
 
   mounted() {
-    this.getGorevs()
+    this.getGorevs();
+    this.getGorevsYap();
+    this.getGorevBitir();
   }
 
 
