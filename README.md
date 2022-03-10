@@ -3,7 +3,7 @@
 ## Project setup
 ```
 1.npm install
-
+```
 ## Run Fake API
 ```
 2.json-server --watch database.json
