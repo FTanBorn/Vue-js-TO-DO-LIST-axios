@@ -2,15 +2,15 @@
 
 ## Project setup
 ```
-1.npm install
+npm install
 ```
 ## Run Fake API
 ```
-2.json-server --watch database.json
+json-server --watch database.json
 ```
 ## Run Project
 ```
-3.npm run serve
+npm run serve
 ```
 ### Compiles and minifies for production
 ```
