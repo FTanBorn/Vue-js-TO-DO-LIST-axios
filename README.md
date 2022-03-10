@@ -7,11 +7,10 @@
 ## Run Fake API
 ```
 2.json-server --watch database.json
-
+```
 ## Run Project
 ```
 3.npm run serve
-
 ```
 ### Compiles and minifies for production
 ```
