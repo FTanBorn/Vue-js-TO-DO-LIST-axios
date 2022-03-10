@@ -2,14 +2,17 @@
 
 ## Project setup
 ```
-npm install
-```
+1.npm install
 
-### Compiles and hot-reloads for development
+## Run Fake API
 ```
-npm run serve
-```
+2.json-server --watch database.json
 
+## Run Project
+```
+3.npm run serve
+
+```
 ### Compiles and minifies for production
 ```
 npm run build
